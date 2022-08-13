@@ -47,27 +47,31 @@ public:
   template <FromVector T> generator<std::optional<T>> deserialize() {
     std::string buf;
     while (std::getline(stream_, buf)) {
+      std::optional<T> record;
       try {
-        co_yield T{tokenize_(buf)};
+        record = T{tokenize_(buf)};
       } catch (...) {
-        co_yield std::nullopt;
+        record = std::nullopt;
       }
+      co_yield std::move(record);
     }
   }
 
   template <FromUnorderedMap T> generator<std::optional<T>> deserialize() {
     std::string buf;
     while (std::getline(stream_, buf)) {
+      std::optional<T> record;
       try {
         std::unordered_map<std::string, std::string> res;
         auto tmp = tokenize_(buf);
         for (size_t i = 0; i < header_.size(); i++) {
           res.emplace(header_.at(i), tmp.at(i));
         }
-        co_yield T{std::move(res)};
+        record = T{std::move(res)};
       } catch (...) {
-        co_yield std::nullopt;
+        record = std::nullopt;
       }
+      co_yield std::move(record);
     }
   }
 

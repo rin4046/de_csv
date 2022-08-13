@@ -15,8 +15,8 @@ template <typename T> struct generator {
     auto final_suspend() noexcept {
       return std::suspend_always{};
     }
-    auto yield_value(T value) {
-      value_ = std::move(value);
+    auto yield_value(T &&value) {
+      value_ = std::forward<T>(value);
       return std::suspend_always{};
     }
     void return_void() {}
