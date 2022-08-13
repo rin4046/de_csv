@@ -60,6 +60,7 @@ template <typename T> struct generator {
 
 private:
   std::coroutine_handle<promise_type> coro_;
-  generator(std::coroutine_handle<promise_type> h) : coro_(h) {}
+  generator(promise_type &p)
+      : coro_(std::coroutine_handle<promise_type>::from_promise(p)) {}
 };
 } // namespace de_csv
