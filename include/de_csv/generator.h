@@ -37,7 +37,7 @@ template <typename T> struct generator {
 
   struct iterator {
     generator *gen_;
-    T operator*() {
+    T &operator*() {
       return gen_->coro_.promise().value_;
     }
     iterator &operator++() {
